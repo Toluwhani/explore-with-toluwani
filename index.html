@@ -88,12 +88,12 @@ h1.logo { font-size: 19px; font-weight: 600; letter-spacing: -0.02em; line-heigh
 h1.logo a { display: inline-flex; border-radius: 50%; }
 h1.logo .mark { width: 46px; height: 46px; display: block; transition: transform .5s cubic-bezier(.3,1.4,.5,1); }
 h1.logo a:hover .mark { transform: rotate(-35deg); }
-#s-wheel .hero { padding: 0 64px; margin-top: -12px; }
+#s-wheel .hero { padding: 0 8px; margin-top: -12px; }
 #s-wheel .kicker { font-family: 'DM Mono', var(--type); font-size-adjust: none; font-weight: 500; font-size: 19px; letter-spacing: -0.01em; text-transform: none; color: var(--ink); line-height: 1.15; text-wrap: balance; }
 #s-wheel .pool-note, #s-wheel .flick-note { transform: none; }
 #s-wheel .d1 { left: 0; top: 4px; width: 40px; height: 40px; }
 #s-wheel .d2 { right: 4px; top: 0; width: 30px; height: 42px; }
-@media (max-width: 560px) { #s-wheel .hero { padding: 0 46px; } #s-wheel .d1 { width: 32px; height: 32px; } #s-wheel .d2 { width: 24px; height: 34px; } #s-wheel .kicker { font-size: 17px; } }
+@media (max-width: 560px) { #s-wheel .hero { padding: 0 8px; } #s-wheel .d1 { width: 32px; height: 32px; } #s-wheel .d2 { width: 24px; height: 34px; } #s-wheel .kicker { font-size: 17px; } }
 @keyframes bob { 0%,100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-7px) rotate(4deg); } }
 
 .city-pick { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center; }
@@ -664,8 +664,6 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
       <h1 class="logo"><a href="./" aria-label="Explore with Toluwani, home"><svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 36L32.00 14.00A22 22 0 0 1 47.56 20.44Z" fill="#F7E3A1" stroke="#2B2A28" stroke-width="1.2" stroke-linejoin="round"/><path d="M32 36L47.56 20.44A22 22 0 0 1 54.00 36.00Z" fill="#F5C6C1" stroke="#2B2A28" stroke-width="1.2" stroke-linejoin="round"/><path d="M32 36L54.00 36.00A22 22 0 0 1 47.56 51.56Z" fill="#CFE3C2" stroke="#2B2A28" stroke-width="1.2" stroke-linejoin="round"/><path d="M32 36L47.56 51.56A22 22 0 0 1 32.00 58.00Z" fill="#C9DDF0" stroke="#2B2A28" stroke-width="1.2" stroke-linejoin="round"/><path d="M32 36L32.00 58.00A22 22 0 0 1 16.44 51.56Z" fill="#DCCDEB" stroke="#2B2A28" stroke-width="1.2" stroke-linejoin="round"/><path d="M32 36L16.44 51.56A22 22 0 0 1 10.00 36.00Z" fill="#F8D2AE" stroke="#2B2A28" stroke-width="1.2" stroke-linejoin="round"/><path d="M32 36L10.00 36.00A22 22 0 0 1 16.44 20.44Z" fill="#F7E3A1" stroke="#2B2A28" stroke-width="1.2" stroke-linejoin="round"/><path d="M32 36L16.44 20.44A22 22 0 0 1 32.00 14.00Z" fill="#F5C6C1" stroke="#2B2A28" stroke-width="1.2" stroke-linejoin="round"/><circle cx="32" cy="36" r="22" fill="none" stroke="#2B2A28" stroke-width="2.4"/><circle cx="32" cy="36" r="5.5" fill="#FFFDF7" stroke="#2B2A28" stroke-width="1.6"/><circle cx="32" cy="36" r="2.4" fill="#F2C94C"/><path d="M32 21c-3.2-5.4-6.4-8.6-6.4-12.6a6.4 6.4 0 0 1 12.8 0c0 4-3.2 7.2-6.4 12.6z" fill="#C9433E" stroke="#2B2A28" stroke-width="1.6" stroke-linejoin="round"/><circle cx="32" cy="8.6" r="2.2" fill="#FFFDF7"/></svg></a></h1>
     </div>
     <div class="hero">
-      <span class="doodle d1" aria-hidden="true"><svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 30c2 14 12 22 22 22s21-8 22-22z"/><path d="M5 30h50"/><path d="M22 22c-3-5 3-8 0-13M31 21c-3-5 3-8 0-13M40 22c-3-5 3-8 0-13"/></svg></span>
-      <span class="doodle d2" aria-hidden="true"><svg viewBox="0 0 50 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M24 14c-12 4-16 22-12 38 2 7 9 8 11 1 4-14 10-24 14-30 3-5-4-12-13-9z"/><path d="M26 14c1-5 4-8 9-9"/></svg></span>
       <span class="kicker">A wheel for finding your next spot</span>
     </div>
     <div class="city-pick">
