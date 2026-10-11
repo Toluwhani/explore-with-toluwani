@@ -88,12 +88,12 @@ h1.logo { font-size: 19px; font-weight: 600; letter-spacing: -0.02em; line-heigh
 h1.logo a { display: inline-flex; border-radius: 50%; }
 h1.logo .mark { width: 46px; height: 46px; display: block; transition: transform .5s cubic-bezier(.3,1.4,.5,1); }
 h1.logo a:hover .mark { transform: rotate(-35deg); }
-#s-wheel .hero { padding: 14px 64px 0; }
+#s-wheel .hero { padding: 0 64px; margin-top: -12px; }
 #s-wheel .kicker { font-family: var(--head); font-size-adjust: var(--head-fsa, none); font-weight: 700; font-size: 26px; letter-spacing: -0.02em; text-transform: none; color: var(--ink); line-height: 1.15; text-wrap: balance; }
 #s-wheel .pool-note, #s-wheel .flick-note { transform: none; }
 #s-wheel .d1 { left: 0; top: 4px; width: 40px; height: 40px; }
 #s-wheel .d2 { right: 4px; top: 0; width: 30px; height: 42px; }
-@media (max-width: 560px) { #s-wheel .hero { padding: 10px 46px 0; } #s-wheel .d1 { width: 32px; height: 32px; } #s-wheel .d2 { width: 24px; height: 34px; } #s-wheel .kicker { font-size: 23px; } }
+@media (max-width: 560px) { #s-wheel .hero { padding: 0 46px; } #s-wheel .d1 { width: 32px; height: 32px; } #s-wheel .d2 { width: 24px; height: 34px; } #s-wheel .kicker { font-size: 23px; } }
 @keyframes bob { 0%,100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-7px) rotate(4deg); } }
 
 .city-pick { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center; }
@@ -666,7 +666,7 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
     <div class="hero">
       <span class="doodle d1" aria-hidden="true"><svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 30c2 14 12 22 22 22s21-8 22-22z"/><path d="M5 30h50"/><path d="M22 22c-3-5 3-8 0-13M31 21c-3-5 3-8 0-13M40 22c-3-5 3-8 0-13"/></svg></span>
       <span class="doodle d2" aria-hidden="true"><svg viewBox="0 0 50 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M24 14c-12 4-16 22-12 38 2 7 9 8 11 1 4-14 10-24 14-30 3-5-4-12-13-9z"/><path d="M26 14c1-5 4-8 9-9"/></svg></span>
-      <span class="kicker">a wheel for finding your next spot</span>
+      <span class="kicker">A wheel for finding your next spot</span>
     </div>
     <div class="city-pick">
       <label for="city">I'm exploring</label>
