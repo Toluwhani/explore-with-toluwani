@@ -82,7 +82,14 @@ h1 .name svg { position: absolute; left: -4%; bottom: -0.14em; width: 108%; heig
 .doodle svg { width: 100%; height: 100%; display: block; overflow: visible; }
 .d1 { width: 44px; height: 44px; left: -18%; top: 4px; }
 .d2 { width: 36px; height: 48px; right: -16%; top: -4px; animation-delay: -2.5s; }
-@media (max-width: 560px) { .hero { padding-top: 34px; } .d1 { left: -2%; top: 0; width: 32px; height: 32px; } .d2 { right: -2%; top: -4px; width: 26px; height: 36px; } }
+.home-top { justify-content: flex-start; }
+h1.logo { font-size: 19px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; text-align: left; }
+h1.logo .name svg { bottom: -0.2em; height: 0.36em; }
+#s-wheel .hero { padding: 14px 64px 0; }
+#s-wheel .kicker { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font-size: 24px; letter-spacing: 0; text-transform: none; color: var(--ink); line-height: 1.2; }
+#s-wheel .d1 { left: 0; top: 4px; width: 40px; height: 40px; }
+#s-wheel .d2 { right: 4px; top: 0; width: 30px; height: 42px; }
+@media (max-width: 560px) { #s-wheel .hero { padding: 10px 46px 0; } #s-wheel .d1 { width: 32px; height: 32px; } #s-wheel .d2 { width: 24px; height: 34px; } #s-wheel .kicker { font-size: 22px; } }
 @keyframes bob { 0%,100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-7px) rotate(4deg); } }
 
 .city-pick { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center; }
@@ -649,11 +656,13 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
 
   <!-- 1. the wheel -->
   <section class="screen" id="s-wheel">
+    <div class="topbar home-top">
+      <h1 class="logo">Explore with <span class="name">Toluwani<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3 12c40-9 90-10 194-4" fill="none" stroke="var(--pop)" stroke-width="5" stroke-linecap="round"/></svg></span></h1>
+    </div>
     <div class="hero">
       <span class="doodle d1" aria-hidden="true"><svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 30c2 14 12 22 22 22s21-8 22-22z"/><path d="M5 30h50"/><path d="M22 22c-3-5 3-8 0-13M31 21c-3-5 3-8 0-13M40 22c-3-5 3-8 0-13"/></svg></span>
       <span class="doodle d2" aria-hidden="true"><svg viewBox="0 0 50 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M24 14c-12 4-16 22-12 38 2 7 9 8 11 1 4-14 10-24 14-30 3-5-4-12-13-9z"/><path d="M26 14c1-5 4-8 9-9"/></svg></span>
       <span class="kicker">a wheel for finding your next spot</span>
-      <h1>Explore with <span class="name">Toluwani<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3 12c40-9 90-10 194-4" fill="none" stroke="var(--pop)" stroke-width="4" stroke-linecap="round"/></svg></span></h1>
     </div>
     <div class="city-pick">
       <label for="city">I'm exploring</label>
