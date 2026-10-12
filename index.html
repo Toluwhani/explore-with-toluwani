@@ -712,7 +712,7 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
       <section class="tr" id="trBox" aria-live="polite"></section>
       <section class="pc-reviews" aria-labelledby="revHead">
         <h3 id="revHead">More reviews</h3>
-        <p>See photos, opening hours and what other people say on Google Maps.</p>
+        <p>Read what people say about this spot on Google.</p>
         <a class="rev-btn" id="revLink" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="#F2C94C" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3l2.6 5.5 6 .8-4.4 4.1 1.1 5.9L12 16.4 6.7 19.3l1.1-5.9L3.4 9.3l6-.8z"/></svg>Read reviews on Google</a>
       </section>
       <div id="pcMine" hidden></div>
@@ -1303,8 +1303,11 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
     document.querySelectorAll('[data-f="name"]').forEach(el => el.textContent = spot.name);
     document.querySelectorAll('[data-f="area"]').forEach(el => el.textContent = (spot.area ? spot.area + ', ' : '') + DATA[store.city].label);
     const q = encodeURIComponent(spot.name + ' ' + (spot.area ? spot.area + ' ' : '') + DATA[store.city].label + ' Nigeria');
-    const url = 'https://www.google.com/maps/search/?api=1&query=' + q + (spot.pid ? '&query_place_id=' + encodeURIComponent(spot.pid) : '');
-    ['pcMap', 'revLink'].forEach(id => { $(id).href = url; });
+    // directions: straight into Google Maps navigation to this spot
+    $('pcMap').href = 'https://www.google.com/maps/dir/?api=1&destination=' + q + (spot.pid ? '&destination_place_id=' + encodeURIComponent(spot.pid) : '');
+    // reviews: Google's reviews list for this exact place, or a reviews search when we don't have its place ID
+    $('revLink').href = spot.pid ? 'https://search.google.com/local/reviews?placeid=' + encodeURIComponent(spot.pid)
+      : 'https://www.google.com/search?q=' + encodeURIComponent(spot.name + ' ' + (spot.area ? spot.area + ' ' : '') + DATA[store.city].label + ' reviews');
     fillPostcard(spot);
     renderTR(spot);
     $('noteInput').value = '';
