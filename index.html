@@ -623,6 +623,16 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
 @media (prefers-reduced-motion: reduce) { .want-card { animation: none; } }
 .byline { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; justify-content: center; }
 .byline input { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font-size: 22px; color: var(--ink); background: transparent; border: 0; border-bottom: 1.5px solid var(--ink); padding: 2px 4px; width: 200px; text-align: center; border-radius: 0; }
+/* homepage: one even gap between every line */
+#s-wheel { --hs: 20px; gap: var(--hs); }
+#s-wheel > * { margin-top: 0 !important; margin-bottom: 0 !important; }
+#s-wheel > .wheel-box { margin-top: 30px !important; }
+#s-wheel .city-pick { gap: var(--hs); }
+#s-wheel .pick-row { row-gap: var(--hs); }
+#s-wheel .hero { padding-top: 0; padding-bottom: 0; }
+#s-wheel .pool-note, #s-wheel .flick-note, #s-wheel .kicker, #s-wheel .city-pick label { line-height: 1.2; }
+#s-wheel .spin-btn { margin: 0; }
+#s-wheel h1.logo { display: flex; margin: 0; line-height: 0; }
 /* reviews list */
 .rv-list { width: 100%; display: flex; flex-direction: column; gap: 14px; }
 .rv-city { width: 100%; text-align: left; font-weight: 700; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); border-bottom: 1.5px solid var(--ink); padding-bottom: 6px; margin-top: 10px; }
