@@ -586,7 +586,20 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
 .tr-date { font-size: 12px; color: var(--ink-soft); letter-spacing: 0.08em; text-transform: uppercase; }
 .tr.none p { margin: 0; font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font-size: 21px; line-height: 1.35; color: var(--ink-soft); }
 .tr-del { align-self: flex-start; }
-.want-row { display: flex; align-items: center; gap: 6px; margin-top: -2px; }
+.city-pick { flex-direction: column; gap: 6px; }
+.pick-row { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px; }
+.want-row { display: flex; align-items: center; gap: 6px; }
+.pick-row .want-btn { height: 47px; white-space: nowrap; }
+#wantLabel .short { display: none; }
+@media (max-width: 560px) {
+  #wantLabel .long { display: none; } #wantLabel .short { display: inline; }
+  .pick-row .want-btn { font-size: 11px; letter-spacing: 0; padding: 0 12px; gap: 6px; }
+  .pick-row select { font-size: 13px; letter-spacing: 0.06em; padding-left: 14px; padding-right: 32px; }
+  .pick-row .select-wrap::after { right: 13px; }
+  .pick-row .want-btn svg { width: 16px; height: 16px; }
+  .want-x { width: 32px; height: 32px; font-size: 16px; }
+  .want-row { gap: 4px; }
+}
 #s-wheel .wheel-box + .pool-note { margin-top: 6px; }
 .want-btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--type); font-size-adjust: var(--type-fsa, none); font-weight: 700; font-size: 13px; letter-spacing: 0.06em; color: var(--ink); background: var(--paper); border: 1.5px dashed var(--ink); border-radius: 999px; padding: 9px 16px; min-height: 42px; cursor: pointer; }
 .want-btn svg { width: 18px; height: 18px; flex: none; }
@@ -690,11 +703,13 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
     </div>
     <div class="city-pick">
       <label for="city">I'm exploring</label>
-      <span class="select-wrap"><select id="city"></select></span>
-    </div>
-    <div class="want-row">
-      <button class="want-btn" id="wantBtn" type="button" aria-haspopup="dialog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg><span id="wantLabel">What are you in the mood for?</span></button>
-      <button class="want-x" id="wantClearX" type="button" aria-label="Clear filters" hidden>×</button>
+      <div class="pick-row">
+        <span class="select-wrap"><select id="city"></select></span>
+        <div class="want-row">
+          <button class="want-btn" id="wantBtn" type="button" aria-haspopup="dialog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg><span id="wantLabel"><span class="long">What are you in the mood for?</span><span class="short">In the mood for?</span></span></button>
+          <button class="want-x" id="wantClearX" type="button" aria-label="Clear filters" hidden>×</button>
+        </div>
+      </div>
     </div>
     <div class="wheel-box">
       <canvas id="wheel" role="img" aria-label="Wheel of food spots"></canvas>
@@ -1124,12 +1139,13 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
   function filterText(f) {
     const bits = [];
     if (f.meal) bits.push(SHORT[f.meal]);
-    if (f.budget) bits.push(BUDGETS.find(b => b[0] === f.budget)[1].replace('Up to', 'up to'));
+    if (f.budget) bits.push('≤₦' + (f.budget / 1000) + 'k');
     return bits.join(' · ');
   }
   function renderWantBtn() {
     const on = filtering();
-    $('wantLabel').textContent = on ? filterText(filt) : 'What are you in the mood for?';
+    if (on) $('wantLabel').textContent = filterText(filt);
+    else $('wantLabel').innerHTML = '<span class="long">What are you in the mood for?</span><span class="short">In the mood for?</span>';
     $('wantBtn').classList.toggle('on', on);
     $('wantClearX').hidden = !on;
   }
