@@ -586,6 +586,27 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
 .tr-date { font-size: 12px; color: var(--ink-soft); letter-spacing: 0.08em; text-transform: uppercase; }
 .tr.none p { margin: 0; font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font-size: 21px; line-height: 1.35; color: var(--ink-soft); }
 .tr-del { align-self: flex-start; }
+.want-row { display: flex; align-items: center; gap: 6px; margin-top: -4px; }
+.want-btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--type); font-size-adjust: var(--type-fsa, none); font-weight: 700; font-size: 13px; letter-spacing: 0.06em; color: var(--ink); background: var(--paper); border: 1.5px dashed var(--ink); border-radius: 999px; padding: 9px 16px; min-height: 42px; cursor: pointer; }
+.want-btn svg { width: 18px; height: 18px; flex: none; }
+.want-btn:hover { border-style: solid; }
+.want-btn.on { background: var(--sage); border-style: solid; box-shadow: 3px 3px 0 var(--ink); }
+.want-x { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--ink); background: var(--paper); color: var(--ink); font-size: 18px; line-height: 1; cursor: pointer; display: grid; place-items: center; }
+.want-sheet { align-items: flex-end; }
+@media (max-width: 639px) { .want-sheet { padding: 0; } .want-card { width: 100%; border-radius: 22px 22px 0 0; border-bottom: 0; box-shadow: 0 -4px 0 var(--ink); padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px)); } }
+@media (min-width: 640px) { .want-sheet { align-items: center; } }
+.want-card { background: var(--paper); color: var(--ink); width: min(100%, 480px); border: 1.5px solid var(--ink); border-radius: 22px; padding: 22px 20px 18px; display: flex; flex-direction: column; gap: 16px; text-align: left; box-shadow: 4px 4px 0 var(--ink); max-height: 100%; overflow-y: auto; animation: rise .22s ease both; }
+@keyframes rise { from { transform: translateY(30px); opacity: 0; } to { transform: none; opacity: 1; } }
+.want-card h2 { margin: 0; font-family: var(--head); font-size-adjust: var(--head-fsa, none); font-size: 24px; letter-spacing: -0.02em; }
+.want-group { display: flex; flex-direction: column; gap: 8px; }
+.want-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.want-chip { font-family: var(--type); font-size-adjust: var(--type-fsa, none); font-weight: 700; font-size: 13px; color: var(--ink); background: var(--paper-2); border: 1.5px solid var(--ink); border-radius: 999px; padding: 9px 14px; min-height: 42px; cursor: pointer; }
+.want-chip[aria-pressed="true"] { background: var(--butter); box-shadow: 3px 3px 0 var(--ink); }
+.want-count { margin: 0; font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font-size: 20px; color: var(--ink-soft); }
+.want-actions { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.want-done { min-width: 0; flex: 1; font-size: 14px; padding: 12px 18px; min-height: 48px; margin: 0; }
+.want-fine { color: var(--ink-soft); font-size: 12px; line-height: 1.4; }
+@media (prefers-reduced-motion: reduce) { .want-card { animation: none; } }
 .byline { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; justify-content: center; }
 .byline input { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font-size: 22px; color: var(--ink); background: transparent; border: 0; border-bottom: 1.5px solid var(--ink); padding: 2px 4px; width: 200px; text-align: center; border-radius: 0; }
 /* reviews list */
@@ -670,6 +691,10 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
       <label for="city">I'm exploring</label>
       <span class="select-wrap"><select id="city"></select></span>
     </div>
+    <div class="want-row">
+      <button class="want-btn" id="wantBtn" type="button" aria-haspopup="dialog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg><span id="wantLabel">What are you in the mood for?</span></button>
+      <button class="want-x" id="wantClearX" type="button" aria-label="Clear filters" hidden>×</button>
+    </div>
     <span class="pool-note" id="poolNote"></span>
     <div class="wheel-box">
       <canvas id="wheel" role="img" aria-label="Wheel of food spots"></canvas>
@@ -685,6 +710,20 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
       <button id="journalBtn" type="button" hidden>My journal</button>
     </div>
   </section>
+
+  <div class="sheet want-sheet" id="wantSheet" hidden>
+    <div class="want-card" role="dialog" aria-modal="true" aria-labelledby="wantTitle">
+      <h2 id="wantTitle">What are you looking for?</h2>
+      <div class="want-group"><span class="field-label">Time to eat</span><div class="want-chips" id="mealChips"></div></div>
+      <div class="want-group"><span class="field-label">Budget per person</span><div class="want-chips" id="budgetChips"></div></div>
+      <p class="want-count" id="wantCount" aria-live="polite"></p>
+      <div class="want-actions">
+        <button class="bracket quiet" type="button" id="wantClear">Clear</button>
+        <button class="spin-btn want-done" type="button" id="wantDone">Show spots</button>
+      </div>
+      <small class="want-fine">Matches are a best guess from each spot's name, and get sharper as people leave reviews.</small>
+    </div>
+  </div>
 
   <!-- 2. the result -->
   <section class="screen" id="s-reveal" hidden>
@@ -750,6 +789,16 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
     <h2 class="step-title">Write your review</h2>
     <div class="byline"><label class="field-label" for="byInput">Your name</label><input id="byInput" type="text" maxlength="40" placeholder="your name" autocomplete="name"></div>
     <fieldset class="company">
+      <legend>what did you come for?</legend>
+      <div class="yesno">
+        <input type="radio" name="meal" id="mlBrunch" value="brunch"><label for="mlBrunch">Brunch</label>
+        <input type="radio" name="meal" id="mlLunch" value="lunch"><label for="mlLunch">Lunch</label>
+        <input type="radio" name="meal" id="mlDinner" value="dinner"><label for="mlDinner">Dinner</label>
+        <input type="radio" name="meal" id="mlDessert" value="dessert"><label for="mlDessert">Dessert / coffee</label>
+        <input type="radio" name="meal" id="mlDrinks" value="drinks"><label for="mlDrinks">Drinks</label>
+      </div>
+    </fieldset>
+    <fieldset class="company">
       <legend>who did you go with?</legend>
       <div class="yesno">
         <input type="radio" name="company" id="coMe" value="just me"><label for="coMe">Just me</label>
@@ -794,7 +843,7 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
         </div>
       </fieldset>
       <div style="display: flex; flex-direction: column; align-items: center; gap: 4px">
-        <label class="field-label" for="spent">I spent</label>
+        <label class="field-label" for="spent">I spent (per person)</label>
         <div class="money"><span>₦</span><input id="spent" type="text" inputmode="numeric" placeholder="0"></div>
       </div>
     </div>
@@ -1031,13 +1080,100 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
   let current = null;
 
   function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+  /* ---------- "what are you looking for?" filters ---------- */
+  const MEALS = [['brunch', 'Breakfast & brunch'], ['lunch', 'Lunch'], ['dinner', 'Dinner'], ['dessert', 'Dessert & coffee'], ['drinks', 'Drinks & night out']];
+  const SHORT = { brunch: 'Brunch', lunch: 'Lunch', dinner: 'Dinner', dessert: 'Dessert', drinks: 'Drinks' };
+  const BUDGETS = [[5000, 'Up to ₦5k'], [15000, 'Up to ₦15k'], [30000, 'Up to ₦30k']];
+  let filt = { meal: '', budget: 0 };
+  try { Object.assign(filt, JSON.parse(localStorage.getItem('ewt-filter') || '{}')); } catch (e) {}
+  const WORDS = {
+    sweet: ['cake', 'bake', 'pastr', 'ice cream', 'icecream', 'cream', 'frost', 'cold stone', 'dessert', 'waffle', 'donut', 'doughnut', 'parfait', 'smoothie', 'gelato', 'cookie', 'yogurt', 'yoghurt', 'cafe', 'café', 'coffee', 'treats'],
+    food: ['restaurant', 'kitchen', 'grill', 'bistro', 'cuisine', 'food', 'eat', 'jollof', 'rice', 'chop', 'buka', 'bukka', 'amala', 'iyan', 'iyán', 'pizza', 'shawarma', 'suya', 'sooyah', 'chicken', 'burger', 'canteen', 'resto', 'seafood', 'lounge', ' bar', 'place', 'joint', 'spot'],
+    drinks: ['lounge', ' bar', 'pub', 'club', 'rooftop', 'cocktail', 'sports', 'restobar', 'wine', 'lime'],
+    brunch: ['cafe', 'café', 'coffee', 'bistro', 'bakery', 'bake', 'brunch', 'breakfast', 'pancake', 'akara', 'pastr', 'tea'],
+    cheap: ['shawarma', 'suya', 'sooyah', 'buka', 'bukka', 'amala', 'iyan', 'iyán', 'canteen', 'mama ', 'iya ', 'small chops', 'smallchops', 'eatables', 'pepper soup', 'akara', 'jollof', ' spot', ' chops', 'joint'],
+    fast: ['chicken republic', 'item 7', 'item7', 'kfc', 'domino', 'pizza', 'cold stone', 'sweet sensation', 'mr biggs', 'tantalizers', 'kilimanjaro', 'burger'],
+    pricey: ['lounge', 'rooftop', 'bistro', 'cocktail', 'wine', 'steak', 'seafood', 'sushi', 'resto', ' bar', 'continental', 'orchid', 'lifestyle']
+  };
+  const hasWord = (n, list) => list.some(w => n.includes(w));
+  // best guess from the spot's name, then corrected by what reviewers actually said
+  function tagsFor(city, spot) {
+    const n = ' ' + spot.name.toLowerCase() + ' ';
+    const meals = new Set();
+    const sweetOnly = hasWord(n, WORDS.sweet) && !hasWord(n, WORDS.food);
+    if (hasWord(n, WORDS.sweet)) meals.add('dessert');
+    if (hasWord(n, WORDS.brunch)) meals.add('brunch');
+    if (hasWord(n, WORDS.drinks)) { meals.add('drinks'); meals.add('dinner'); }
+    if (!sweetOnly) { meals.add('lunch'); meals.add('dinner'); }
+    let cost = sweetOnly ? 6000 : hasWord(n, WORDS.cheap) ? 4000 : hasWord(n, WORDS.fast) ? 7000 : hasWord(n, WORDS.pricey) ? 20000 : 10000;
+    const rs = typeof reviewsFor === 'function' ? reviewsFor(city, spot.name) : [];
+    rs.forEach(r => { if (r.meal) meals.add(r.meal); });
+    const spent = rs.map(r => +r.spent).filter(v => v > 0).sort((a, b) => a - b);
+    if (spent.length) cost = spent[Math.floor(spent.length / 2)];
+    return { meals, cost };
+  }
+  const filtering = () => !!(filt.meal || filt.budget);
+  function matches(city, spot) {
+    if (!filtering()) return true;
+    const t = tagsFor(city, spot);
+    if (filt.meal && !t.meals.has(filt.meal)) return false;
+    if (filt.budget && t.cost > filt.budget) return false;
+    return true;
+  }
+  function filterText(f) {
+    const bits = [];
+    if (f.meal) bits.push(SHORT[f.meal]);
+    if (f.budget) bits.push(BUDGETS.find(b => b[0] === f.budget)[1].replace('Up to', 'up to'));
+    return bits.join(' · ');
+  }
+  function renderWantBtn() {
+    const on = filtering();
+    $('wantLabel').textContent = on ? filterText(filt) : 'What are you in the mood for?';
+    $('wantBtn').classList.toggle('on', on);
+    $('wantClearX').hidden = !on;
+  }
+  let draftFilt = null;
+  function countFor(f) {
+    const city = store.city, keep = filt; filt = f;
+    const n = spotsFor(city).filter(s => !isVisited(city, s.id) && matches(city, s)).length;
+    filt = keep; return n;
+  }
+  function renderWant() {
+    const mk = (box, list, key) => {
+      box.innerHTML = '';
+      list.forEach(([v, label]) => {
+        const b = el('button', 'want-chip', label); b.type = 'button'; b.setAttribute('aria-pressed', draftFilt[key] === v ? 'true' : 'false');
+        b.addEventListener('click', () => { draftFilt[key] = draftFilt[key] === v ? (key === 'budget' ? 0 : '') : v; renderWant(); });
+        box.append(b);
+      });
+    };
+    mk($('mealChips'), MEALS, 'meal'); mk($('budgetChips'), BUDGETS, 'budget');
+    const n = countFor(draftFilt);
+    $('wantCount').textContent = n === 0 ? 'No spots match that yet. Try a bigger budget or another time.' : n + (n === 1 ? ' spot matches' : ' spots match') + (draftFilt.meal || draftFilt.budget ? '' : ' (no filters)');
+    $('wantDone').disabled = n < 2;
+    $('wantDone').textContent = n < 2 ? 'Not enough spots' : 'Show ' + Math.min(n, ROUND) + ' on the wheel';
+  }
+  function openWant() { if (spinning) return; draftFilt = Object.assign({}, filt); renderWant(); $('wantSheet').hidden = false; setTimeout(() => { const f = $('mealChips').querySelector('button'); if (f) f.focus(); }, 30); }
+  function closeWant() { $('wantSheet').hidden = true; $('wantBtn').focus(); }
+  function applyFilt(f) { filt = { meal: f.meal || '', budget: f.budget || 0 }; try { localStorage.setItem('ewt-filter', JSON.stringify(filt)); } catch (e) {} renderWantBtn(); newRound(true); }
+  $('wantBtn').addEventListener('click', openWant);
+  $('wantClearX').addEventListener('click', e => { e.stopPropagation(); applyFilt({}); });
+  $('wantDone').addEventListener('click', () => { applyFilt(draftFilt); closeWant(); });
+  $('wantClear').addEventListener('click', () => { draftFilt = { meal: '', budget: 0 }; renderWant(); });
+  $('wantSheet').addEventListener('click', e => { if (e.target === $('wantSheet')) closeWant(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('wantSheet').hidden) closeWant(); });
+  renderWantBtn();
+
   function newRound(force) {
     const city = store.city;
-    const pool = spotsFor(city).filter(s => !isVisited(city, s.id));
+    const pool = spotsFor(city).filter(s => !isVisited(city, s.id) && matches(city, s));
     const stillValid = !force && round.length && round.every(r => pool.some(p => p.id === r.id)) && round._city === city;
     if (!stillValid) { round = shuffle(pool.slice()).slice(0, ROUND); round._city = city; }
     const total = spotsFor(city).length;
-    $('poolNote').textContent = pool.length
+    $('poolNote').textContent = filtering()
+      ? (pool.length < 2 ? (pool.length ? 'Only 1 spot matches. Try a bigger budget or another time.' : 'No spots match yet. Try a bigger budget or another time.')
+        : pool.length + (pool.length === 1 ? ' spot matches' : ' spots match') + (pool.length > round.length ? ', ' + round.length + ' on the wheel' : ''))
+      : pool.length
       ? round.length + ' spots on the wheel' + (pool.length > round.length ? ', ' + (pool.length - round.length) + ' more waiting' : '')
       : 'You\'ve been everywhere on the list! Add more spots or untick some.';
     spinBtn.disabled = round.length < 2;
@@ -1513,7 +1649,7 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
     draft = { photos: [], note: '', stars: 0, back: '', spent: '' };
     const tc = $('toneColor'); if (tc) tc.checked = true;
     $('noteInput').value = ''; $('spent').value = '';
-    document.querySelectorAll('input[name="stars"], input[name="back"], input[name="company"]').forEach(i => i.checked = false);
+    document.querySelectorAll('input[name="stars"], input[name="back"], input[name="company"], input[name="meal"]').forEach(i => i.checked = false);
     $('verdict').textContent = '';
     renderBooth();
     $('byInput').value = lastBy();
@@ -1531,21 +1667,26 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
   function myIds() { try { return new Set(JSON.parse(localStorage.getItem('ewt-mine') || '[]')); } catch (e) { return new Set(); } }
   function fromRow(row, mine) {
     return { id: row.id, name: row.name, area: row.area || '', city: row.city, by: row.by_name || 'Someone', date: row.created_at, stars: row.stars || 0,
-      note: row.note || '', company: row.company || '', spent: row.spent ? String(row.spent) : '', back: row.back || '',
+      note: row.note || '', company: row.company || '', spent: row.spent ? String(row.spent) : '', back: row.back || '', meal: row.meal || '',
       photos: (row.photos || []).filter(u => typeof u === 'string' && u.startsWith(PHOTO_BASE)), mine: mine.has(row.id) };
   }
   const loaded = {};
+  const COLS = 'id,created_at,city,name,area,by_name,stars,note,company,spent,back,photos';
+  let hasMeal = true; // turns false if the database doesn't have the meal column yet
   async function loadCity(city) {
     if (!sb || loaded[city]) return;
     loaded[city] = 'loading';
     try {
-      const { data, error } = await sb.from('reviews').select('id,created_at,city,name,area,by_name,stars,note,company,spent,back,photos').eq('city', city).order('created_at', { ascending: false }).limit(2000);
+      let res = await sb.from('reviews').select(COLS + (hasMeal ? ',meal' : '')).eq('city', city).order('created_at', { ascending: false }).limit(2000);
+      if (res.error && hasMeal) { hasMeal = false; res = await sb.from('reviews').select(COLS).eq('city', city).order('created_at', { ascending: false }).limit(2000); }
+      const { data, error } = res;
       if (error) throw error;
       Object.keys(REVIEWS).forEach(k => { if (k.startsWith(city + '|')) delete REVIEWS[k]; });
       const mine = myIds();
       data.forEach(row => { const k = rkey(city, row.name); (REVIEWS[k] = REVIEWS[k] || []).push(fromRow(row, mine)); });
       loaded[city] = true;
       if (store.city === city) {
+        if (filtering() && !spinning) newRound(true);
         draw();
         if (!$('s-reveal').hidden && current) renderTR(current);
         if (!$('s-reviews').hidden) renderReviews();
@@ -1569,7 +1710,7 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
     if (!sb) { toast("Couldn't reach the reviews right now. Check your connection and try again."); return; }
     let last = 0; try { last = +localStorage.getItem('ewt-last-post') || 0; } catch (e) {}
     if (Date.now() - last < 30000) { toast('Give it a few seconds before posting again'); return; }
-    const bk = document.querySelector('input[name="back"]:checked'), co = document.querySelector('input[name="company"]:checked');
+    const bk = document.querySelector('input[name="back"]:checked'), co = document.querySelector('input[name="company"]:checked'), ml = document.querySelector('input[name="meal"]:checked');
     const by = ($('byInput').value.trim() || 'Someone').slice(0, 40);
     try { localStorage.setItem('ewt-by', by); } catch (e) {}
     btn.disabled = true; btn.textContent = 'Posting…';
@@ -1585,7 +1726,10 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
       const spent = parseInt($('spent').value.replace(/[^\d]/g, ''), 10);
       const row = { city: store.city, spot: current.name.trim().toLowerCase().slice(0, 120), name: current.name.slice(0, 120), area: (current.area || '').slice(0, 120), by_name: by,
         stars: st ? +st.value : 0, note: note.slice(0, 2000), company: co ? co.value : '', spent: isFinite(spent) ? spent : null, back: bk ? bk.value : '', photos };
-      const { data, error } = await sb.from('reviews').insert(row).select('id,created_at,city,name,area,by_name,stars,note,company,spent,back,photos').single();
+      if (hasMeal && ml) row.meal = ml.value;
+      let res = await sb.from('reviews').insert(row).select(COLS + (row.meal ? ',meal' : '')).single();
+      if (res.error && row.meal) { hasMeal = false; delete row.meal; res = await sb.from('reviews').insert(row).select(COLS).single(); }
+      const { data, error } = res;
       if (error) throw error;
       const ids = myIds(); ids.add(data.id); try { localStorage.setItem('ewt-mine', JSON.stringify([...ids].slice(-200))); localStorage.setItem('ewt-last-post', String(Date.now())); } catch (e) {}
       const k = rkey(store.city, current.name);

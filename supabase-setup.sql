@@ -36,3 +36,7 @@ on conflict (id) do nothing;
 drop policy if exists "anyone can upload review photos" on storage.objects;
 create policy "anyone can upload review photos" on storage.objects
   for insert to anon, authenticated with check (bucket_id = 'review-photos');
+
+-- Oct 2026: what the reviewer came for (used by the wheel's filters)
+alter table public.reviews add column if not exists meal text not null default ''
+  check (meal in ('', 'brunch', 'lunch', 'dinner', 'dessert', 'drinks'));
