@@ -586,7 +586,7 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
 .tr-date { font-size: 12px; color: var(--ink-soft); letter-spacing: 0.08em; text-transform: uppercase; }
 .tr.none p { margin: 0; font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font-size: 21px; line-height: 1.35; color: var(--ink-soft); }
 .tr-del { align-self: flex-start; }
-.want-row { display: flex; align-items: center; gap: 6px; margin-top: -4px; }
+.want-row { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
 .want-btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--type); font-size-adjust: var(--type-fsa, none); font-weight: 700; font-size: 13px; letter-spacing: 0.06em; color: var(--ink); background: var(--paper); border: 1.5px dashed var(--ink); border-radius: 999px; padding: 9px 16px; min-height: 42px; cursor: pointer; }
 .want-btn svg { width: 18px; height: 18px; flex: none; }
 .want-btn:hover { border-style: solid; }
@@ -691,15 +691,15 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
       <label for="city">I'm exploring</label>
       <span class="select-wrap"><select id="city"></select></span>
     </div>
-    <div class="want-row">
-      <button class="want-btn" id="wantBtn" type="button" aria-haspopup="dialog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg><span id="wantLabel">What are you in the mood for?</span></button>
-      <button class="want-x" id="wantClearX" type="button" aria-label="Clear filters" hidden>×</button>
-    </div>
     <span class="pool-note" id="poolNote"></span>
     <div class="wheel-box">
       <canvas id="wheel" role="img" aria-label="Wheel of food spots"></canvas>
       <canvas id="sparkles" aria-hidden="true"></canvas>
       <div class="pointer" id="pointer" aria-hidden="true"><svg viewBox="0 0 48 62" fill="none" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M24 58C17 44 8 34 8 22a16 16 0 0 1 32 0c0 12-9 22-16 36z" fill="var(--pop)"/><circle cx="24" cy="21" r="6" fill="var(--paper)"/></svg></div>
+    </div>
+    <div class="want-row">
+      <button class="want-btn" id="wantBtn" type="button" aria-haspopup="dialog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg><span id="wantLabel">What are you in the mood for?</span></button>
+      <button class="want-x" id="wantClearX" type="button" aria-label="Clear filters" hidden>×</button>
     </div>
     <button class="spin-btn" id="spinBtn" type="button">Spin the wheel</button>
     <span class="flick-note">or give the wheel a flick yourself</span>
