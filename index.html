@@ -123,6 +123,7 @@ select:focus-visible { outline: none; }
 .links { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
 .hchip { font-family: var(--type); font-size-adjust: var(--type-fsa, none); font-weight: 700; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink); background: var(--paper-2); border: 1.5px dashed var(--ink); border-radius: 999px; padding: 8px 16px; min-height: 40px; cursor: pointer; }
 .hchip:hover { border-style: solid; background: var(--butter); }
+@media (max-width: 480px) { .links { display: grid; grid-template-columns: 1fr 1fr; width: 100%; max-width: 340px; } .links .hchip { padding: 8px 10px; } }
 .hchip:disabled { opacity: 0.4; cursor: default; background: var(--paper-2); border-style: dashed; }
 @media (max-width: 420px) { .links { gap: 8px; } .hchip { font-size: 11px; letter-spacing: 0.06em; padding: 8px 12px; } }
 
@@ -656,6 +657,21 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
 .rv-card .st { color: #E3A81B; letter-spacing: 0.06em; }
 .rv-card .st span { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); color: #2B2A28; letter-spacing: 0; margin-left: 6px; }
 .rv-card .sn { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font-size: 18px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ar-filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.ar-list { width: 100%; display: flex; flex-direction: column; gap: 16px; text-align: left; }
+.ar-card { background: #FFFDF8; color: #2B2A28; border: 1.5px solid var(--ink); border-radius: 16px; box-shadow: 4px 4px 0 var(--ink); padding: 16px 16px 14px; display: flex; flex-direction: column; gap: 10px; }
+.ar-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.ar-l { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.ar-name { font: inherit; font-family: 'Ranchers', var(--serif); font-size-adjust: none; font-weight: 400; font-size: 26px; line-height: 1.05; text-align: left; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; overflow-wrap: anywhere; }
+.ar-where { color: var(--ink-soft); font-size: 13px; }
+.ar-date { flex: none; font-family: 'Courier Prime', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); padding-top: 6px; }
+.ar-rev { display: flex; flex-direction: column; gap: 8px; border-top: 1px dashed var(--rule); padding-top: 10px; }
+.ar-again { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); }
+.ar-photos { display: flex; gap: 8px; overflow-x: auto; }
+.ar-photos img { width: 92px; height: 92px; flex: none; object-fit: cover; border-radius: 8px; border: 1px solid var(--rule); background: #EFE9DD; }
+.ar-none { margin: 0; font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font-size: 19px; color: var(--ink-soft); border-top: 1px dashed var(--rule); padding-top: 10px; }
+.ar-acts { display: flex; flex-wrap: wrap; gap: 8px; }
+.ar-acts .hchip { min-height: 36px; padding: 6px 12px; font-size: 11px; }
 .rv-empty { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font-size: 21px; color: var(--ink-soft); padding: 30px 0; }
 /* my spots */
 .spots-list { width: 100%; text-align: left; border-top: 1.5px solid var(--ink); }
@@ -741,6 +757,7 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
       <button class="hchip" id="shuffleBtn" type="button">Shuffle</button>
       <button class="hchip" id="spotsBtn" type="button">All spots</button>
       <button class="hchip" id="reviewsBtn" type="button" data-go="reviews">Reviews</button>
+      <button class="hchip" id="mineBtn" type="button" data-go="mine">My archive</button>
       <button id="journalBtn" type="button" hidden>My journal</button>
     </div>
   </section>
@@ -910,6 +927,19 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
     <div class="rv-list" id="revList"></div>
   </section>
 
+  <!-- my archive -->
+  <section class="screen" id="s-mine" hidden>
+    <div class="topbar">
+      <button class="bracket quiet" type="button" data-go="wheel">Back to wheel</button>
+      <span class="kicker" id="mineCount"></span>
+    </div>
+    <h2 class="step-title">Places you've been</h2>
+    <span class="hand tilt">your own little food diary</span>
+    <div class="ar-filters" id="mineFilters"></div>
+    <div class="ar-list" id="mineList"></div>
+    <p class="foot-note">Your reviews are also public on each spot. This list lives on this phone or laptop, so it won't follow you to another device.</p>
+  </section>
+
   <!-- journal -->
   <section class="screen" id="s-journal" hidden>
     <div class="topbar">
@@ -1016,7 +1046,10 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
   function setVisited(city, id, on) {
     const v = new Set(store.visited[city] || []);
     on ? v.add(id) : v.delete(id);
-    store.visited[city] = [...v]; persist();
+    store.visited[city] = [...v];
+    store.visitedAt = store.visitedAt || {};
+    if (on) store.visitedAt[city + '|' + id] = store.visitedAt[city + '|' + id] || new Date().toISOString(); else delete store.visitedAt[city + '|' + id];
+    persist();
   }
 
   /* ---------- journal (IndexedDB, photos included) ---------- */
@@ -1047,7 +1080,7 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
   }
 
   /* ---------- screens ---------- */
-  const SCREENS = ['wheel', 'reveal', 'snap', 'note', 'rate', 'saved', 'journal', 'spots', 'fonts', 'reviews'];
+  const SCREENS = ['wheel', 'reveal', 'snap', 'note', 'rate', 'saved', 'journal', 'spots', 'fonts', 'reviews', 'mine'];
   // every screen change goes into the browser history, so the phone's back button/swipe steps back through the app
   let stack = ['wheel'];
   try { history.replaceState({ ewt: 0 }, ''); } catch (e) {}
@@ -1075,6 +1108,7 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
     if (name === 'journal') renderJournal();
     if (name === 'spots') renderSpots();
     if (name === 'reviews') { renderReviews(); loadCity(store.city); }
+    if (name === 'mine') { renderMine(); syncMine(); }
     window.scrollTo(0, 0);
     const h = $('s-' + name).querySelector('h2, h1, .place-name');
     if (h && name !== 'wheel') { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
@@ -1838,7 +1872,10 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
       if (error) throw error;
       const ids = myIds(); ids.add(data.id); try { localStorage.setItem('ewt-mine', JSON.stringify([...ids].slice(-200))); localStorage.setItem('ewt-last-post', String(Date.now())); } catch (e) {}
       const k = rkey(store.city, current.name);
-      (REVIEWS[k] = REVIEWS[k] || []).unshift(fromRow(data, ids));
+      const mineRow = fromRow(data, ids);
+      (REVIEWS[k] = REVIEWS[k] || []).unshift(mineRow);
+      saveMine(Object.assign({}, mineRow, { city: store.city }));
+      if (current.id && spotsFor(store.city).some(x => x.id === current.id)) setVisited(store.city, current.id, true);
       showAll = false; renderTR(current); draw(); go('reveal');
       toast('Posted! Thanks for sharing ★');
     } catch (e) {
@@ -1855,6 +1892,96 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
     showAll = false; startVisit(spot);
     $('scKick').textContent = list.length ? 'REVIEWED SPOT' : 'THE WHEEL PICKED';
     go('reveal');
+  }
+
+  /* ---------- my archive: places you've been + your own reviews ---------- */
+  function myReviews() { try { return JSON.parse(localStorage.getItem('ewt-my-reviews') || '[]'); } catch (e) { return []; } }
+  function saveMine(r) {
+    const list = myReviews().filter(x => x.id !== r.id); list.unshift(r);
+    try { localStorage.setItem('ewt-my-reviews', JSON.stringify(list.slice(0, 300))); } catch (e) {}
+  }
+  let mineSynced = false, mineFilter = 'all';
+  // reviews posted from this device before the archive existed: fetch them once by id
+  async function syncMine() {
+    if (mineSynced || !sb) return; mineSynced = true;
+    const have = new Set(myReviews().map(r => r.id)), want = [...myIds()].filter(id => !have.has(id));
+    if (!want.length) return;
+    try {
+      const { data, error } = await sb.from('reviews').select(COLS).in('id', want);
+      if (error || !data) return;
+      data.forEach(row => saveMine(Object.assign(fromRow(row, myIds()), { city: row.city })));
+      if (!$('s-mine').hidden) renderMine();
+    } catch (e) {}
+  }
+  function mineEntries() {
+    const by = {};
+    const add = (city, name, area, date) => {
+      const k = rkey(city, name);
+      by[k] = by[k] || { city, name, area: area || '', date: date || '', reviews: [] };
+      if (date && date > by[k].date) by[k].date = date;
+      if (!by[k].area && area) by[k].area = area;
+      return by[k];
+    };
+    myReviews().forEach(r => { if (DATA[r.city]) add(r.city, r.name, r.area, r.date).reviews.push(r); });
+    Object.keys(store.visited || {}).forEach(city => {
+      if (!DATA[city]) return;
+      const spots = spotsFor(city);
+      (store.visited[city] || []).forEach(id => { const sp = spots.find(x => x.id === id); if (sp) add(city, sp.name, sp.area, (store.visitedAt || {})[city + '|' + id] || ''); });
+    });
+    Object.values(by).forEach(e => e.reviews.sort((a, b) => b.date.localeCompare(a.date)));
+    return Object.values(by).sort((a, b) => (b.date || '').localeCompare(a.date || '') || a.name.localeCompare(b.name));
+  }
+  function renderMine() {
+    const all = mineEntries(), box = $('mineList'), fb = $('mineFilters');
+    const reviewed = all.filter(e => e.reviews.length).length, cities = new Set(all.map(e => e.city)).size;
+    $('mineCount').textContent = all.length ? all.length + (all.length === 1 ? ' place' : ' places') + ' · ' + cities + (cities === 1 ? ' city' : ' cities') : '';
+    fb.innerHTML = ''; box.innerHTML = '';
+    if (!all.length) {
+      box.append(el('p', 'rv-empty', "Nothing here yet. Spin the wheel, go eat, then leave a review or tick the spot in All spots. Everywhere you've been will collect here."));
+      fb.hidden = true; return;
+    }
+    fb.hidden = false;
+    [['all', 'All ' + all.length], ['reviewed', 'Reviewed ' + reviewed], ['todo', 'Not reviewed ' + (all.length - reviewed)]].forEach(([k, label]) => {
+      const b = el('button', 'want-chip small', label); b.type = 'button'; b.setAttribute('aria-pressed', mineFilter === k ? 'true' : 'false');
+      b.addEventListener('click', () => { mineFilter = k; renderMine(); }); fb.append(b);
+    });
+    const shown = all.filter(e => mineFilter === 'all' || (mineFilter === 'reviewed' ? e.reviews.length : !e.reviews.length));
+    if (!shown.length) box.append(el('p', 'rv-empty', mineFilter === 'todo' ? "You've reviewed everywhere you've been. Nice." : 'No reviews yet.'));
+    shown.forEach(e => {
+      const c = el('article', 'ar-card');
+      const top = el('div', 'ar-top');
+      const nm = el('button', 'ar-name', e.name); nm.type = 'button'; nm.addEventListener('click', () => openSpot(e.city, e.name));
+      const where = el('small', 'ar-where', (e.area ? e.area + ', ' : '') + DATA[e.city].label);
+      const left = el('div', 'ar-l'); left.append(nm, where);
+      top.append(left);
+      if (e.date) top.append(el('span', 'ar-date', new Date(e.date).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })));
+      c.append(top);
+      if (e.reviews.length) {
+        e.reviews.forEach((r, i) => {
+          const rv = el('div', 'ar-rev');
+          if (i > 0) rv.append(el('span', 'ar-again', 'Earlier visit · ' + new Date(r.date).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })));
+          if (r.stars) { const st = el('div', 'cr-stars', starsTxt(r.stars)); st.append(el('span', null, VERDICTS[r.stars])); rv.append(st); }
+          if (r.note) rv.append(el('p', 'cr-note', r.note));
+          if (r.photos && r.photos.length) { const ph = el('div', 'ar-photos'); r.photos.forEach(src => { const im = document.createElement('img'); im.src = src; im.alt = 'Photo from ' + e.name; im.loading = 'lazy'; ph.append(im); }); rv.append(ph); }
+          const facts = el('div', 'tr-facts');
+          if (r.meal) facts.append(el('span', null, SHORT[r.meal] || r.meal));
+          if (r.company) facts.append(el('span', null, r.company === 'just me' ? 'just me' : 'with ' + r.company));
+          if (r.spent) facts.append(el('span', null, 'spent ' + naira(r.spent)));
+          if (r.back) facts.append(el('span', null, 'go back: ' + r.back));
+          if (facts.childNodes.length) rv.append(facts);
+          c.append(rv);
+        });
+      } else {
+        c.append(el('p', 'ar-none', "You haven't said how it was yet."));
+      }
+      const acts = el('div', 'ar-acts');
+      const add = el('button', 'hchip', e.reviews.length ? 'Review again' : 'Add your review'); add.type = 'button';
+      add.addEventListener('click', () => { openSpot(e.city, e.name); addReviewBtn.click(); });
+      const open = el('button', 'hchip', 'Open spot'); open.type = 'button'; open.addEventListener('click', () => openSpot(e.city, e.name));
+      acts.append(add, open);
+      c.append(acts);
+      box.append(c);
+    });
   }
 
   function renderReviews() {
