@@ -572,6 +572,7 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
 .pc-reviews .mine .dt { font-size: 12px; color: var(--ink-soft); letter-spacing: 0.08em; text-transform: uppercase; }
 .rev-btn { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; font-family: var(--type); font-size-adjust: var(--type-fsa, none); font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; color: var(--ink); background: var(--butter); border: 1.5px solid var(--ink); border-radius: 999px; padding: 10px 16px; min-height: 44px; box-shadow: 3px 3px 0 var(--ink); }
 .rev-btn svg { width: 18px; height: 18px; }
+.tr-add { background: var(--ink); color: #FFFDF8; box-shadow: 3px 3px 0 #C9BFAE; cursor: pointer; margin-top: 4px; }
 /* Toluwani's review on the result screen */
 .tr { width: 100%; background: #FFFDF8; color: #2B2A28; border: 1.5px solid var(--ink); border-radius: 16px; padding: 18px 18px 16px; text-align: left; display: flex; flex-direction: column; gap: 12px; box-shadow: 4px 4px 0 var(--ink); }
 .tr:empty { display: none; }
@@ -792,9 +793,7 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
       </section>
       <div id="pcMine" hidden></div>
     </div>
-    <div class="nav">
-      <button class="bracket big next" type="button" id="reviewBtn" hidden>Review this spot</button>
-    </div>
+    <button class="rev-btn tr-add" type="button" id="reviewBtn" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Add your review</span></button>
   </section>
 
   <!-- 4. snap -->
@@ -1716,6 +1715,7 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
     return c;
   }
   let showAll = false;
+  const addReviewBtn = $('reviewBtn');
   function renderTR(spot) {
     const box = $('trBox'); box.innerHTML = '';
     const list = spot ? reviewsFor(store.city, spot.name).slice().sort((a, b) => b.date.localeCompare(a.date)) : [];
@@ -1744,10 +1744,12 @@ legend { font-family: var(--hand); font-size-adjust: var(--hand-fsa, none); font
       shown.forEach(r => box.append(reviewCard(r)));
       if (list.length > 3) { const more = el('button', 'bracket cr-more', showAll ? 'Show fewer' : 'Show all ' + list.length + ' reviews'); more.type = 'button'; more.addEventListener('click', () => { showAll = !showAll; renderTR(spot); }); box.append(more); }
     }
-    const rb = $('reviewBtn'); rb.hidden = false; rb.textContent = 'Add your review';
+    addReviewBtn.hidden = false;
+    
+    box.append(addReviewBtn);
   }
 
-  $('reviewBtn').addEventListener('click', () => {
+  addReviewBtn.addEventListener('click', () => {
     if (!current) return;
     draft = { photos: [], note: '', stars: 0, back: '', spent: '' };
     const tc = $('toneColor'); if (tc) tc.checked = true;
